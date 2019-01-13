@@ -1,7 +1,7 @@
 {
   "name": "project-cli",
-  "version": "0.0.1-development",
-  "description": "Project Management made with ease per command line",
+  "version": "0.0.0-development",
+  "description": "Easier project management",
   "main": "src/projectus.js",
   "author": "Tobias Görg",
   "license": "MIT",
@@ -88,7 +88,7 @@
     "lint-staged": "8.0.4",
     "nodemon": "^1.18.9",
     "prettier": "1.15.1",
-    "semantic-release": "15.10.8",
+    "semantic-release": "^15.13.3",
     "travis-deploy-once": "5.0.9",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2"
