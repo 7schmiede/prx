@@ -2,7 +2,7 @@
 import './libs/polyfills';
 import * as app from 'commander';
 import { store } from './libs';
-import { listProjectsCommand, deleteProjectCommand, addProjectCommand } from './commands';
+import { listProjectsCommand, deleteProjectCommand, addProjectCommand, openProjectCommand } from './commands';
 
 const { version, description } = require('../package.json');
 
@@ -13,6 +13,12 @@ app
   .alias('ls')
   .description('List all projects in workspace')
   .action(() => listProjectsCommand());
+
+app
+  .command('open')
+  .alias('o')
+  .description('Open project')
+  .action(() => openProjectCommand());
 
 app
   .command('add')
