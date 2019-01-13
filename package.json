@@ -1,22 +1,22 @@
 {
-  "name": "project-cli",
+  "name": "prx",
   "version": "0.0.0-development",
   "description": "Easier project management",
-  "main": "src/projectus.js",
+  "main": "src/prx.js",
   "author": "Tobias Görg",
   "license": "MIT",
   "private": false,
   "preferGlobal": true,
   "bin": {
-    "projectus": "./dist/projectus.js"
+    "prx": "./dist/prx.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fen89/project-cli"
+    "url": "https://github.com/fen89/prx"
   },
   "scripts": {
-    "start": "nodemon --exec ts-node -- ./src/projectus",
-    "ts-node": "ts-node ./src/projectus.ts",
+    "start": "nodemon --exec ts-node -- ./src/prx",
+    "ts-node": "ts-node ./src/prx.ts",
     "build": "tsc",
     "watch": "tsc --watch",
     "lint": "lint-staged",
