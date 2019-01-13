@@ -3,12 +3,14 @@ sudo: false
 language: node_js
 node_js: node
 
+notifications:
+  email: false
 install:
 - npm install
 - npm install typescript -g
 cache:
   directories:
-  - $HOME/.npm
+  - ~/.npm
 script:
 - npm run lint
 - npm run build
