@@ -1,6 +1,6 @@
 # prx
 
-[![Build Status](https://travis-ci.org/fen89/ts-projectus.svg?branch=master)](https://travis-ci.org/fen89/ts-projectus)
+[![Build Status](https://travis-ci.org/fen89/prx.svg?branch=master)](https://travis-ci.org/fen89/ts-projectus)
 [![renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)]()
 [![commitizen](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)]()
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
