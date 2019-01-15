@@ -1,6 +1,6 @@
 # prx
 
-[![Build Status](https://travis-ci.org/fen89/prx.svg?branch=master)](https://travis-ci.org/fen89/ts-projectus)
+[![Build Status](https://travis-ci.org/fen89/prx.svg?branch=master)](https://travis-ci.org/fen89/prx)
 [![renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)]()
 [![commitizen](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)]()
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
@@ -31,5 +31,6 @@ Commands:
   list|ls        List all projects in workspace
   open|o         Open project
   add            Add a project to the workspace
+  edit           Edit a project in workspace
   delete|del     Remove a project from the workspace
 ```
