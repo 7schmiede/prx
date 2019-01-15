@@ -1,9 +1,11 @@
 import { exec } from 'child_process';
+import * as crypto from 'crypto';
 
 const Conf = require('conf');
 const config = new Conf({ configName: 'config' });
 
-interface Project {
+export interface Project {
+  id: string;
   path: string;
   name: string;
 }
@@ -16,7 +18,7 @@ class Store {
     return projects;
   }
 
-  addProject(path: string, name: string): boolean {
+  addProject(path: string, name: string) {
     let projects = this.getProjects();
     const projectExists = projects.find(project => {
       return project.path === path && project.name === name;
@@ -25,16 +27,26 @@ class Store {
       return false;
     }
 
-    projects.push({ path: path, name: name });
+    projects.push({ id: this.generateGuid(), path: path, name: name });
     config.set(PROJECTS, projects);
     return true;
   }
 
-  removeProject(name: string): boolean {
+  updateProject(id: string, update: Project) {
     let projects = this.getProjects();
-    const projectId = projects.findIndex(project => {
-      return project.name === name;
-    });
+    const projectId = projects.findIndex(project => project.id === id);
+    if (projectId === -1) {
+      return false;
+    }
+
+    projects[projectId] = update;
+    config.set(PROJECTS, projects);
+    return true;
+  }
+
+  removeProject(id: string) {
+    let projects = this.getProjects();
+    const projectId = projects.findIndex(project => project.id === id);
     if (projectId === -1) {
       return false;
     }
@@ -47,6 +59,10 @@ class Store {
   openConfigInEditor = () => {
     exec('start ' + config.path);
   };
+
+  private generateGuid() {
+    return crypto.randomBytes(16).toString('hex');
+  }
 }
 
 export default Store;
