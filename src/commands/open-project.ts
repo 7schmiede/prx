@@ -1,24 +1,25 @@
 import * as colors from 'colors';
+import { readEditors } from './../libs/editors';
 import { store, openInEditor } from '../libs';
 import inquirer = require('inquirer');
 
 const OPEN_VS_CODE = 'VS Code';
 const OPEN_EXPLORER = 'Explorer';
+const OPEN_VISUAL_STUDIO = 'Visual Studio';
 
 export function openProjectCommand() {
   const projects = store.getProjects();
-  const projectNames = projects.map(p => p.name);
   inquirer
     .prompt([
       {
         type: 'list',
         name: 'name',
-        choices: projectNames
+        choices: projects.map(p => p.name)
       },
       {
         type: 'list',
         name: 'action',
-        choices: [OPEN_VS_CODE, OPEN_EXPLORER]
+        choices: readEditors()
       }
     ])
     .then((answers: any) => {

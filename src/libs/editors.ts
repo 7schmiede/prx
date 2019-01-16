@@ -1,7 +1,24 @@
-import * as os from 'os';
 import { execSync, exec } from 'child_process';
+import { hasExecutable } from './utils';
+import { isWindows } from './utils';
+import { existsSync, readdirSync } from 'fs';
+import { join } from 'path';
 
-export type Editor = 'VS Code' | 'Explorer';
+export type Editor = 'VS Code' | 'Explorer' | 'Visual Studio';
+
+export function readEditors() {
+  const editors: Editor[] = [];
+  if (hasExplorer()) {
+    editors.push('Explorer');
+  }
+  if (hasVsCode()) {
+    editors.push('VS Code');
+  }
+  // if (hasVisualStudio()) {
+  //   editors.push('Visual Studio');
+  // }
+  return editors;
+}
 
 export function openInEditor(editor: Editor, path: string) {
   switch (editor) {
@@ -9,17 +26,11 @@ export function openInEditor(editor: Editor, path: string) {
       return openInExplorer(path);
     case 'VS Code':
       return openInVsCode(path);
+    case 'Visual Studio':
+      return openInVisualStudio(path);
     default:
       throw new Error(`Unknown editor: ${editor}`);
   }
-}
-
-function isWindows() {
-  return os.platform() === 'win32';
-}
-
-function isLinux() {
-  return os.platform() === 'darwin';
 }
 
 function hasExplorer() {
@@ -38,6 +49,14 @@ function hasVsCode() {
   }
 }
 
+function hasVisualStudio() {
+  if (isWindows) {
+    return hasExecutable('devenv', process.cwd());
+  } else {
+    return false;
+  }
+}
+
 function openInExplorer(path: string) {
   if (isWindows) {
     exec(`start explorer ${path}`);
@@ -47,6 +66,24 @@ function openInExplorer(path: string) {
 function openInVsCode(path: string) {
   if (isWindows) {
     exec(`start code ${toWindows(path)}`);
+  }
+}
+
+function openInVisualStudio(path: string) {
+  if (isWindows) {
+    if (!existsSync(path)) {
+      return;
+    }
+
+    const files = readdirSync(path);
+    const slnRegExp = new RegExp(`.*\.(sln)`, 'ig');
+    const solutions = files.filter(file => file.match(slnRegExp));
+    if (!solutions || solutions.length === 0) {
+      return;
+    }
+
+    const solutionPath = join(path, solutions[0]);
+    exec(`start devenv ${toWindows(solutionPath)}`);
   }
 }
 
