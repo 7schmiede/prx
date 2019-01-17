@@ -1,6 +1,6 @@
 {
   "name": "@fen89/prx",
-  "version": "0.0.0-development",
+  "version": "0.0.1-development",
   "description": "Easier project management",
   "main": "dist/prx.js",
   "author": "Tobias Görg",
@@ -65,7 +65,10 @@
     "core-js": "^2.5.7",
     "find-package-json": "^1.1.0",
     "inquirer": "^6.2.0",
-    "inquirer-directory": "^2.1.0"
+    "inquirer-directory": "^2.1.0",
+    "install": "^0.12.2",
+    "npm": "^6.5.0",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@semantic-release/changelog": "3.0.2",

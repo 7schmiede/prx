@@ -11,7 +11,12 @@
         "outDir": "./dist",
         "sourceMap": false,
         "strict": true,
-        "noImplicitAny": false
+        "noImplicitAny": false,
+        "moduleResolution": "node",
+        "baseUrl": "./",
+        "paths": {
+            "@common": ["src/common"]
+        }
     },
     "include": [
         "src/**/*.ts"

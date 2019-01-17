@@ -41,6 +41,11 @@ app
   .description('Open the settings file')
   .action(() => store.openConfigInEditor());
 
+app
+  .command('config')
+  .description('Open the final config')
+  .action(() => store.get());
+
 app.parse(process.argv);
 
 if (!app.args.length) {
