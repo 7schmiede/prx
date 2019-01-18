@@ -1,6 +1,6 @@
 import { IOrigin, IProject } from './config.interface';
 
-export interface IOriginConfig {
+export interface ILocalConfig {
   origins: IOrigin[];
   projects: IProject[];
 }

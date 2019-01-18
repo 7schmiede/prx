@@ -1,33 +1,22 @@
 import { exec } from 'child_process';
 import * as crypto from 'crypto';
 
-import { IStore, IOriginConfig, IConfig, IProjectConfig, IProject } from '../../../common';
+import { IStore, IConfig, IOriginConfig, IProject, IPrxConfig, IUserConfig, ILocalConfig } from '../../../common';
 import { OriginStore } from './store.origin';
 import { ProjectStore } from './store.project';
-
-const Conf = require('conf');
-
-export interface Project {
-  id: string;
-  path: string;
-  name: string;
-}
-
-const CONFIG_NAME = 'prx.config';
-const SCOPE = 'config';
+import { UserStore } from './store.user';
+import { ConfigStore } from './store.config';
+import { LocalStore } from './store.local';
 
 class Store implements IStore {
   // origin = new Conf({ configName: 'prx.origin' });
   // user = new Conf({ configName: 'prx.user' });
   // local = new Conf({ configName: 'prx.local' });
 
-  private config = new Conf({ configName: CONFIG_NAME });
+  private configStore = new ConfigStore();
   private get configData(): IConfig {
     if (!this._configData) {
-      this._configData = {
-        origins: this.config.store.origins.map(i => ({ ...i, scope: SCOPE })),
-        projects: this.config.store.projects.map(i => ({ ...i, scope: SCOPE }))
-      };
+      this._configData = this.configStore.get();
     }
     return this._configData;
   }
@@ -36,14 +25,29 @@ class Store implements IStore {
   private originStore = new OriginStore();
   private get originData(): IOriginConfig {
     if (!this._originData) {
-      const originStoreData = this.originStore.get();
-      this._originData = {
-        origins: [...originStoreData.origins]
-      };
+      this._originData = this.originStore.get();
     }
     return this._originData;
   }
   private _originData: IOriginConfig;
+
+  private userStore = new UserStore();
+  private get userData(): IUserConfig {
+    if (!this._userData) {
+      this._userData = this.userStore.get();
+    }
+    return this._userData;
+  }
+  private _userData: IUserConfig;
+
+  private localStore = new LocalStore();
+  private get localData(): ILocalConfig {
+    if (!this._localData) {
+      this._localData = this.localStore.get();
+    }
+    return this._localData;
+  }
+  private _localData: ILocalConfig;
 
   private projectStore = new ProjectStore();
   private get projectData(): IProject {
@@ -57,10 +61,10 @@ class Store implements IStore {
   constructor() {}
 
   get() {
-    let result: IConfig = {
+    let result: IPrxConfig = {
       ...this.configData,
-      origins: this.flatById(this.configData.origins, this.originData.origins),
-      projects: this.flatById(this.configData.projects, [this.projectData])
+      origins: this.flatById(this.originData.origins, this.userData.origins, this.localData.origins),
+      projects: this.flatById(this.originData.projects, this.userData.projects, this.localData.projects, [this.projectData])
     };
 
     console.log(result);
@@ -87,44 +91,49 @@ class Store implements IStore {
   }
 
   getProjects() {
-    const projects: Project[] = []; // = config.get(PROJECTS, []);
+    const projects: IProject[] = []; // = config.get(PROJECTS, []);
     return projects;
   }
 
   addProject(path: string, name: string) {
-    let projects = this.getProjects();
-    const projectExists = projects.find(project => {
-      return project.path === path && project.name === name;
-    });
-    if (projectExists) {
-      return false;
-    }
+    throw new Error('not implemented');
+    // let projects = this.getProjects();
+    // const projectExists = projects.find(project => {
+    //   return project.path === path && project.name === name;
+    // });
+    // if (projectExists) {
+    //   return false;
+    // }
 
-    projects.push({ id: this.generateGuid(), path: path, name: name });
+    // projects.push({ id: this.generateGuid(), path: path, name: name });
     // config.set(PROJECTS, projects);
     return true;
   }
 
-  updateProject(id: string, update: Project) {
-    let projects = this.getProjects();
-    const projectId = projects.findIndex(project => project.id === id);
-    if (projectId === -1) {
-      return false;
-    }
+  updateProject(id: string, update: IProject) {
+    throw new Error('not implemented');
 
-    projects[projectId] = update;
+    // let projects = this.getProjects();
+    // const projectId = projects.findIndex(project => project.id === id);
+    // if (projectId === -1) {
+    //   return false;
+    // }
+
+    // projects[projectId] = update;
     // config.set(PROJECTS, projects);
     return true;
   }
 
   removeProject(id: string) {
-    let projects = this.getProjects();
-    const projectId = projects.findIndex(project => project.id === id);
-    if (projectId === -1) {
-      return false;
-    }
+    throw new Error('not implemented');
 
-    projects.splice(projectId, 1);
+    // let projects = this.getProjects();
+    // const projectId = projects.findIndex(project => project.id === id);
+    // if (projectId === -1) {
+    //   return false;
+    // }
+
+    // projects.splice(projectId, 1);
     // config.set(PROJECTS, projects);
     return true;
   }

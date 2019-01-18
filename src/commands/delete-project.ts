@@ -10,7 +10,7 @@ export function deleteProjectCommand() {
         type: 'list',
         name: 'project',
         message: 'Choose project to delete',
-        choices: projects.map(project => project.name)
+        choices: projects.map(project => project.id)
       },
       {
         type: 'confirm',

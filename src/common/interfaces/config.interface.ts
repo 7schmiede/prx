@@ -1,6 +1,7 @@
+import { IOriginConfig, IUserConfig, ILocalConfig, IProjectConfig } from '..';
+
 export interface IConfig {
-  origins: IOrigin[];
-  projects: IProject[];
+  version: string;
 }
 
 export interface IOrigin {
@@ -24,5 +25,7 @@ export interface IProject {
   id: string;
   path: string;
 }
+
+export interface IPrxConfig extends IConfig, IOriginConfig, IUserConfig, ILocalConfig, IProjectConfig {}
 
 export type ConfigScope = 'config' | 'orgin' | 'user' | 'local' | 'prx';

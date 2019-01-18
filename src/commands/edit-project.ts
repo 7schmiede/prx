@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer';
 import * as colors from 'colors';
 import { store, isDirectory } from '../libs';
-import { Project } from '../libs/config/store/store';
+import { IProject } from '../common';
 
 export async function editProjectCommand() {
   const projects = store.getProjects();
@@ -11,7 +11,7 @@ export async function editProjectCommand() {
       name: 'project',
       choices: projects.map(project => {
         return {
-          name: `${project.name} - ${colors.gray(project.path)}`,
+          name: `${project.id} - ${colors.gray(project.path)}`,
           value: project
         };
       })
@@ -20,7 +20,7 @@ export async function editProjectCommand() {
 
   const { project } = answers;
 
-  answers = await inquirer.prompt<Project>([
+  answers = await inquirer.prompt<IProject>([
     {
       type: 'input',
       name: 'name',
@@ -41,7 +41,7 @@ export async function editProjectCommand() {
     console.log(colors.red('The given path is not a directory.'));
     return;
   }
-  const succeeded = store.updateProject(project.id, { id: project.id, path: path, name: name });
+  const succeeded = store.updateProject(project.id, { id: project.id, path: path, scope: 'prx' });
   if (succeeded) {
     console.log(colors.green('Project updated.'));
   } else {

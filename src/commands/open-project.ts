@@ -14,7 +14,7 @@ export function openProjectCommand() {
       {
         type: 'list',
         name: 'name',
-        choices: projects.map(p => p.name)
+        choices: projects.map(p => p.id)
       },
       {
         type: 'list',
@@ -24,7 +24,7 @@ export function openProjectCommand() {
     ])
     .then((answers: any) => {
       const { name, action } = answers;
-      const project = projects.find(p => p.name === name);
+      const project = projects.find(p => p.id === name);
       if (!project) {
         return; // should never happen!
       }
