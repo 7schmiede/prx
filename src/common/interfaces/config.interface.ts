@@ -1,22 +1,28 @@
 export interface IConfig {
-  settings: IConfigSettings;
+  origins: IOrigin[];
+  projects: IProject[];
 }
 
-export interface IConfigSettings {
-  companies: IConfigCompany[];
-}
-
-export interface IConfigCompany {
+export interface IOrigin {
+  scope: ConfigScope;
   id: string;
-  source: IConfigSource;
+  source: ISource;
 }
 
-export interface IConfigSource {
+export interface ISource {
   type: string;
 }
 
-export interface IConfigSourcePrx extends IConfigSource {}
+export interface IPrxSource extends ISource {}
 
-export interface IConfigSourceGit extends IConfigSource {}
+export interface IGitSource extends ISource {}
 
-export interface IConfigSourceCustom extends IConfigSource {}
+export interface ICustomSource extends ISource {}
+
+export interface IProject {
+  scope: ConfigScope;
+  id: string;
+  path: string;
+}
+
+export type ConfigScope = 'config' | 'orgin' | 'user' | 'local' | 'prx';

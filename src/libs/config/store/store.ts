@@ -1,10 +1,9 @@
 import { exec } from 'child_process';
 import * as crypto from 'crypto';
-import * as fs from 'fs';
-import * as path from 'path';
 
-import { IStore } from '@common';
-import { CompanyStore } from './store.company';
+import { IStore, IOriginConfig, IConfig, IProjectConfig, IProject } from '../../../common';
+import { OriginStore } from './store.origin';
+import { ProjectStore } from './store.project';
 
 const Conf = require('conf');
 
@@ -15,38 +14,77 @@ export interface Project {
 }
 
 const CONFIG_NAME = 'prx.config';
+const SCOPE = 'config';
 
 class Store implements IStore {
-  config = new Conf({ configName: CONFIG_NAME });
-  // company = new Conf({ configName: 'prx.company' });
+  // origin = new Conf({ configName: 'prx.origin' });
   // user = new Conf({ configName: 'prx.user' });
   // local = new Conf({ configName: 'prx.local' });
 
-  constructor(private companyStore: CompanyStore) {}
-
-  get() {
-    let result = {
-      ...this.config.store,
-      ...this.companyStore.get()
-      // ...user.store,
-      // ...local.store
-    };
-
-    // prx from current dir
-    const projectPrxFile = path.join(process.cwd(), 'prx.json');
-    if (fs.existsSync(projectPrxFile)) {
-      const data = fs.readFileSync(projectPrxFile, 'utf8');
-      const prx = JSON.parse(data);
-      result = {
-        ...result,
-        projects: [...(result && result.projects ? result.projects : []), ...(prx && prx.projects ? prx.projects : [])]
+  private config = new Conf({ configName: CONFIG_NAME });
+  private get configData(): IConfig {
+    if (!this._configData) {
+      this._configData = {
+        origins: this.config.store.origins.map(i => ({ ...i, scope: SCOPE })),
+        projects: this.config.store.projects.map(i => ({ ...i, scope: SCOPE }))
       };
     }
+    return this._configData;
+  }
+  private _configData: IConfig;
+
+  private originStore = new OriginStore();
+  private get originData(): IOriginConfig {
+    if (!this._originData) {
+      const originStoreData = this.originStore.get();
+      this._originData = {
+        origins: [...originStoreData.origins]
+      };
+    }
+    return this._originData;
+  }
+  private _originData: IOriginConfig;
+
+  private projectStore = new ProjectStore();
+  private get projectData(): IProject {
+    if (!this._projectData) {
+      this._projectData = this.projectStore.get();
+    }
+    return this._projectData;
+  }
+  private _projectData: IProject;
+
+  constructor() {}
+
+  get() {
+    let result: IConfig = {
+      ...this.configData,
+      origins: this.flatById(this.configData.origins, this.originData.origins),
+      projects: this.flatById(this.configData.projects, [this.projectData])
+    };
 
     console.log(result);
   }
 
   set(value: any) {}
+
+  flatById(...maps: any[]): any[] {
+    const result = maps[0];
+    maps.forEach(map => {
+      map.forEach((row: any) => {
+        if (!row) {
+          return;
+        }
+        const ix = result.findIndex((i: any) => i.id === row.id);
+        if (ix > -1) {
+          result[ix] = { ...result[ix], ...row };
+        } else {
+          result.push(row);
+        }
+      });
+    });
+    return result;
+  }
 
   getProjects() {
     const projects: Project[] = []; // = config.get(PROJECTS, []);
@@ -92,7 +130,7 @@ class Store implements IStore {
   }
 
   openConfigInEditor = () => {
-    exec('start ' + this.config.path);
+    exec('start ' + this.configData);
   };
 
   private generateGuid() {

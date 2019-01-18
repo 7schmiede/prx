@@ -1,8 +1,7 @@
 import * as inquirer from 'inquirer';
 import * as colors from 'colors';
 import { store, isDirectory } from '../libs';
-
-import { Project } from 'src/libs/config/store/store';
+import { Project } from '../libs/config/store/store';
 
 export async function editProjectCommand() {
   const projects = store.getProjects();
