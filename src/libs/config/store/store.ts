@@ -9,10 +9,6 @@ import { ConfigStore } from './store.config';
 import { LocalStore } from './store.local';
 
 class Store implements IStore {
-  // origin = new Conf({ configName: 'prx.origin' });
-  // user = new Conf({ configName: 'prx.user' });
-  // local = new Conf({ configName: 'prx.local' });
-
   private configStore = new ConfigStore();
   private get configData(): IConfig {
     if (!this._configData) {
