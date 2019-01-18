@@ -1,16 +1,16 @@
-import { IStore, IProject } from '../../../common';
+import { IStore, IProject, ConfigScope } from '../../../common';
 import * as fs from 'fs';
 import * as path from 'path';
 
 const CONFIG_NAME = 'prx.json';
-const CONFIG_NODE = '';
 const SCOPE = 'prx';
 
 export class ProjectStore implements IStore {
+  private projectPrxFile = path.join(process.cwd(), CONFIG_NAME);
+
   private get config(): IProject {
-    const projectPrxFile = path.join(process.cwd(), CONFIG_NAME);
-    if (fs.existsSync(projectPrxFile)) {
-      const data = fs.readFileSync(projectPrxFile, 'utf8');
+    if (fs.existsSync(this.projectPrxFile)) {
+      const data = fs.readFileSync(this.projectPrxFile, 'utf8');
       const prx = JSON.parse(data);
       this._config = {
         ...prx,
@@ -25,7 +25,7 @@ export class ProjectStore implements IStore {
     return this.config;
   }
 
-  set(value: IProject) {
-    throw new Error('not implemented');
+  set(value: IProject, scope: ConfigScope = SCOPE) {
+    fs.writeFileSync(this.projectPrxFile, JSON.stringify(value), 'utf8');
   }
 }

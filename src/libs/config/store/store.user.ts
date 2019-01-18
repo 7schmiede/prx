@@ -1,9 +1,8 @@
-import { IStore, IOrigin, IUserConfig, IProject } from '../../../common';
+import { IStore, IOrigin, IUserConfig, IProject, ConfigScope } from '../../../common';
 
 const Conf = require('conf');
 
 const CONFIG_NAME = 'prx.user';
-const CONFIG_NODE = '';
 const SCOPE = 'user';
 
 export class UserStore implements IStore {
@@ -20,7 +19,7 @@ export class UserStore implements IStore {
     };
   }
 
-  set(value: IUserConfig) {
-    this.config.set(CONFIG_NODE, value);
+  set(value: IUserConfig, scope: ConfigScope = SCOPE) {
+    this.config.set(value);
   }
 }

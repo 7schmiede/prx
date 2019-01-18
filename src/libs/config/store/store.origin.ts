@@ -1,9 +1,8 @@
-import { IStore, IOriginConfig, IOrigin, IProject } from '../../../common';
+import { IStore, IOriginConfig, IOrigin, IProject, ConfigScope } from '../../../common';
 
 const Conf = require('conf');
 
 const CONFIG_NAME = 'prx.origin';
-const CONFIG_NODE = '';
 const SCOPE = 'origin';
 
 export class OriginStore implements IStore {
@@ -20,7 +19,7 @@ export class OriginStore implements IStore {
     };
   }
 
-  set(value: IOriginConfig) {
-    this.config.set(CONFIG_NODE, value);
+  set(value: IOriginConfig, scope: ConfigScope = SCOPE) {
+    this.config.set(value);
   }
 }

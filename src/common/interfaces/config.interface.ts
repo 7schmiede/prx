@@ -28,4 +28,4 @@ export interface IProject {
 
 export interface IPrxConfig extends IConfig, IOriginConfig, IUserConfig, ILocalConfig, IProjectConfig {}
 
-export type ConfigScope = 'config' | 'orgin' | 'user' | 'local' | 'prx';
+export type ConfigScope = 'config' | 'origin' | 'user' | 'local' | 'prx';

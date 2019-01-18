@@ -1,9 +1,8 @@
-import { IStore, ILocalConfig, IOrigin, IProject } from '../../../common';
+import { IStore, ILocalConfig, IOrigin, IProject, ConfigScope } from '../../../common';
 
 const Conf = require('conf');
 
 const CONFIG_NAME = 'prx.local';
-const CONFIG_NODE = '';
 const SCOPE = 'local';
 
 export class LocalStore implements IStore {
@@ -20,7 +19,7 @@ export class LocalStore implements IStore {
     };
   }
 
-  set(value: ILocalConfig) {
-    this.config.set(CONFIG_NODE, value);
+  set(value: ILocalConfig, scope: ConfigScope = SCOPE) {
+    this.config.set(value);
   }
 }

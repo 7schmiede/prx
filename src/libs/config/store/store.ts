@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import * as crypto from 'crypto';
 
-import { IStore, IConfig, IOriginConfig, IProject, IPrxConfig, IUserConfig, ILocalConfig } from '../../../common';
+import { IStore, IConfig, IOriginConfig, IProject, IPrxConfig, IUserConfig, ILocalConfig, ConfigScope } from '../../../common';
 import { OriginStore } from './store.origin';
 import { ProjectStore } from './store.project';
 import { UserStore } from './store.user';
@@ -56,17 +56,35 @@ class Store implements IStore {
 
   constructor() {}
 
-  get() {
+  get(): IPrxConfig {
     let result: IPrxConfig = {
       ...this.configData,
       origins: this.flatById(this.originData.origins, this.userData.origins, this.localData.origins),
       projects: this.flatById(this.originData.projects, this.userData.projects, this.localData.projects, [this.projectData])
     };
-
     console.log(result);
+    return result;
   }
 
-  set(value: any) {}
+  set(value: any, scope: ConfigScope) {
+    switch (scope) {
+      case 'config':
+        this.configStore.set(value, scope);
+        break;
+      case 'origin':
+        this.originStore.set(value, scope);
+        break;
+      case 'user':
+        this.userStore.set(value, scope);
+        break;
+      case 'local':
+        this.localStore.set(value, scope);
+        break;
+      case 'prx':
+        this.projectStore.set(value, scope);
+        break;
+    }
+  }
 
   flatById(...maps: any[]): any[] {
     const result = maps[0];
@@ -87,7 +105,8 @@ class Store implements IStore {
   }
 
   getProjects() {
-    const projects: IProject[] = []; // = config.get(PROJECTS, []);
+    const projects: IProject[] = this.get().projects;
+    this.set({ origins: [{ id: 'nutz', source: 'url2' }] }, 'user');
     return projects;
   }
 
